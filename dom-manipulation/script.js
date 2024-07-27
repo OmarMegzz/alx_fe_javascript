@@ -1,40 +1,47 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const quotes = [
-    {
-      text: "The only way to do great work is to love what you do.",
-      category: "Work",
-    },
-    {
-      text: "In the end, we will remember not the words of our enemies, but the silence of our friends.",
-      category: "Friendship",
-    },
-    {
-      text: "The best way to predict the future is to create it.",
-      category: "Future",
-    },
-    {
-      text: "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
-      category: "Mindfulness",
-    },
-    {
-      text: "Life is 10% what happens to us and 90% how we react to it.",
-      category: "Life",
-    },
-    { text: "The purpose of our lives is to be happy.", category: "Happiness" },
-    {
-      text: "It is never too late to be what you might have been.",
-      category: "Motivation",
-    },
-    {
-      text: "Your time is limited, don't waste it living someone else's life.",
-      category: "Life",
-    },
-    { text: "The best revenge is massive success.", category: "Success" },
-    {
-      text: "You miss 100% of the shots you don’t take.",
-      category: "Motivation",
-    },
-  ];
+  // Retrieve quotes from local storage or initialize with default quotes
+  const storedQuotes = localStorage.getItem("quotes");
+  const quotes = storedQuotes
+    ? JSON.parse(storedQuotes)
+    : [
+        {
+          text: "The only way to do great work is to love what you do.",
+          category: "Work",
+        },
+        {
+          text: "In the end, we will remember not the words of our enemies, but the silence of our friends.",
+          category: "Friendship",
+        },
+        {
+          text: "The best way to predict the future is to create it.",
+          category: "Future",
+        },
+        {
+          text: "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
+          category: "Mindfulness",
+        },
+        {
+          text: "Life is 10% what happens to us and 90% how we react to it.",
+          category: "Life",
+        },
+        {
+          text: "The purpose of our lives is to be happy.",
+          category: "Happiness",
+        },
+        {
+          text: "It is never too late to be what you might have been.",
+          category: "Motivation",
+        },
+        {
+          text: "Your time is limited, don't waste it living someone else's life.",
+          category: "Life",
+        },
+        { text: "The best revenge is massive success.", category: "Success" },
+        {
+          text: "You miss 100% of the shots you don’t take.",
+          category: "Motivation",
+        },
+      ];
 
   const quoteDisplay = document.getElementById("quoteDisplay");
   const randomQuoteBtn = document.getElementById("newQuote");
@@ -48,31 +55,39 @@ document.addEventListener("DOMContentLoaded", function () {
   function showRandomQuote() {
     const randomIndx = Math.floor(Math.random() * quotes.length);
     const randomQuote = quotes[randomIndx];
-    quoteDisplay.innerHTML = `"${randomQuote.text}"-${randomQuote.category}`;
+    quoteDisplay.innerHTML = `"${randomQuote.text}" - ${randomQuote.category}`;
+    sessionStorage.setItem(
+      "lastViewedQuote",
+      `"${randomQuote.text}" - ${randomQuote.category}`
+    );
   }
+
   function createAddQuoteForm() {
     const form = document.createElement("form");
 
     const quoteInput = document.createElement("input");
     quoteInput.type = "text";
-    quoteInput.placeholder = "enter your quote";
+    quoteInput.placeholder = "Enter your quote";
     quoteInput.id = "quoteInput";
     form.appendChild(quoteInput);
 
     const categoryInput = document.createElement("input");
     categoryInput.type = "text";
-    categoryInput.placeholder = "enter your category here";
+    categoryInput.placeholder = "Enter your category here";
     categoryInput.id = "categoryInput";
     form.appendChild(categoryInput);
 
     const addQuoteBtn = document.createElement("button");
-    addQuoteBtn.textContent = "add quote";
-    addQuoteBtn.id = "addQuptebtn";
+    addQuoteBtn.textContent = "Add Quote";
+    addQuoteBtn.id = "addQuoteBtn";
     form.appendChild(addQuoteBtn);
 
     quoteContainer.appendChild(form);
 
-    addQuoteBtn.addEventListener("click", addQuote);
+    addQuoteBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      addQuote();
+    });
   }
 
   function addQuote() {
@@ -92,10 +107,13 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("Please fill out both fields.");
     }
   }
+
   function saveQuotes() {
     localStorage.setItem("quotes", JSON.stringify(quotes));
   }
+
   btnExportToJsonFile.addEventListener("click", exportToJsonFile);
+
   function exportToJsonFile() {
     const dataStr = JSON.stringify(quotes);
     const dataBlob = new Blob([dataStr], { type: "application/json" });
@@ -107,7 +125,9 @@ document.addEventListener("DOMContentLoaded", function () {
     downloadLink.click();
     document.body.removeChild(downloadLink);
   }
+
   inputImportFile.addEventListener("change", importFromJsonFile);
+
   function importFromJsonFile(event) {
     const fileReader = new FileReader();
     fileReader.onload = function (event) {
