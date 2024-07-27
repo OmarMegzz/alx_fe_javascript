@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Retrieve quotes from local storage or initialize with default quotes
   const storedQuotes = localStorage.getItem("quotes");
   const quotes = storedQuotes
     ? JSON.parse(storedQuotes)
