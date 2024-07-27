@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const quoteDisplay = document.getElementById("quoteDisplay");
   const randomQuoteBtn = document.getElementById("newQuote");
   const quoteContainer = document.getElementById("addQuoteFormContainer");
+  const btnExportToJsonFile = document.getElementById("exportToJsonFile");
+  const inputImportFile = document.getElementById("importFile");
 
   randomQuoteBtn.addEventListener("click", showRandomQuote);
   createAddQuoteForm();
@@ -80,13 +82,46 @@ document.addEventListener("DOMContentLoaded", function () {
     const quoteText = quoteInput.value.trim();
     const categoryText = categoryInput.value.trim();
 
-    if (quoteText && categoryText) {
+    if (quoteText !== "" && categoryText !== "") {
       quotes.push({ text: quoteText, category: categoryText });
       quoteInput.value = "";
       categoryInput.value = "";
+      saveQuotes();
       alert("Quote added successfully!");
     } else {
       alert("Please fill out both fields.");
     }
+  }
+  function saveQuotes() {
+    localStorage.setItem("quotes", JSON.stringify(quotes));
+  }
+  btnExportToJsonFile.addEventListener("click", exportToJsonFile);
+  function exportToJsonFile() {
+    const dataStr = JSON.stringify(quotes);
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(dataBlob);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = url;
+    downloadLink.download = "quotes.json";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  }
+  inputImportFile.addEventListener("change", importFromJsonFile);
+  function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function (event) {
+      const importedQuotes = JSON.parse(event.target.result);
+      quotes.push(...importedQuotes);
+      saveQuotes();
+      alert("Quotes imported successfully!");
+    };
+    fileReader.readAsText(event.target.files[0]);
+  }
+
+  // Load last viewed quote from session storage
+  const lastViewedQuote = sessionStorage.getItem("lastViewedQuote");
+  if (lastViewedQuote) {
+    quoteDisplay.innerHTML = lastViewedQuote;
   }
 });
