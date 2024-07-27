@@ -51,9 +51,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const categoryFilter = document.getElementById("categoryFilter");
 
   randomQuoteBtn.addEventListener("click", showRandomQuote);
-  categoryFilter.addEventListener("change", filterQuotes); // Added event listener for category change
+  categoryFilter.addEventListener("change", filterQuotes);
 
   createAddQuoteForm();
+  updateCategoryFilter();
 
   function showRandomQuote() {
     const filteredQuotes = getFilteredQuotes();
@@ -173,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function () {
     categories.forEach((category) => {
       const option = document.createElement("option");
       option.value = category;
-      option.textContent = category; // Added to set the text content
+      option.textContent = category;
       categoryFilter.appendChild(option);
     });
 
@@ -189,7 +190,4 @@ document.addEventListener("DOMContentLoaded", function () {
   if (lastViewedQuote) {
     quoteDisplay.innerHTML = lastViewedQuote;
   }
-
-  // Update category filter dropdown
-  updateCategoryFilter();
 });
