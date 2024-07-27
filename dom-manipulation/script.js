@@ -51,6 +51,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const categoryFilter = document.getElementById("categoryFilter");
 
   randomQuoteBtn.addEventListener("click", showRandomQuote);
+  categoryFilter.addEventListener("change", filterQuotes); // Added event listener for category change
+
   createAddQuoteForm();
 
   function showRandomQuote() {
