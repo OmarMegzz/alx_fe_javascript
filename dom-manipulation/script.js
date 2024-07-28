@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const serverUrl = "https://jsonplaceholder.typicode.com/posts";
   const storedQuotes = localStorage.getItem("quotes");
   const quotes = storedQuotes
     ? JSON.parse(storedQuotes)
@@ -48,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnExportToJsonFile = document.getElementById("exportToJsonFile");
   const inputImportFile = document.getElementById("importFile");
   const categoryFilter = document.getElementById("categoryFilter");
+  const notification = document.getElementById("notification");
 
   randomQuoteBtn.addEventListener("click", showRandomQuote);
   categoryFilter.addEventListener("change", filterQuotes);
@@ -111,6 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
       categoryInput.value = "";
       saveQuotes();
       updateCategoryFilter();
+      syncWithServer();
       alert("Quote added successfully!");
     } else {
       alert("Please fill out both fields.");
@@ -144,6 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
       quotes.push(...importedQuotes);
       saveQuotes();
       updateCategoryFilter();
+      syncWithServer();
       alert("Quotes imported successfully!");
     };
     fileReader.readAsText(event.target.files[0]);
@@ -183,6 +187,42 @@ document.addEventListener("DOMContentLoaded", function () {
       filterQuotes();
     }
   }
+
+  function syncWithServer() {
+    fetch(serverUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(quotes),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Data synced with server:", data);
+      })
+      .catch((error) => {
+        console.error("Error syncing with server:", error);
+      });
+  }
+
+  function fetchFromServer() {
+    fetch(serverUrl)
+      .then((response) => response.json())
+      .then((serverQuotes) => {
+        if (JSON.stringify(serverQuotes) !== JSON.stringify(quotes)) {
+          quotes.length = 0;
+          quotes.push(...serverQuotes);
+          saveQuotes();
+          updateCategoryFilter();
+          notification.innerHTML = "Quotes updated from server.";
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching from server:", error);
+      });
+  }
+
+  setInterval(fetchFromServer, 10000); // Periodic fetching every 10 seconds
 
   // Load last viewed quote from session storage
   const lastViewedQuote = sessionStorage.getItem("lastViewedQuote");
