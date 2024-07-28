@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
       categoryInput.value = "";
       saveQuotes();
       updateCategoryFilter();
-      syncWithServer();
+      syncQuotes();
       alert("Quote added successfully!");
     } else {
       alert("Please fill out both fields.");
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
       quotes.push(...importedQuotes);
       saveQuotes();
       updateCategoryFilter();
-      syncWithServer();
+      syncQuotes();
       alert("Quotes imported successfully!");
     };
     fileReader.readAsText(event.target.files[0]);
@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function syncWithServer() {
+  function syncQuotes() {
     fetch(serverUrl, {
       method: "POST",
       headers: {
