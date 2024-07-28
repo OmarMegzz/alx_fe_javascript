@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  function fetchFromServer() {
+  function fetchQuotesFromServer() {
     fetch(serverUrl)
       .then((response) => response.json())
       .then((serverQuotes) => {
@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  setInterval(fetchFromServer, 10000); // Periodic fetching every 10 seconds
+  setInterval(fetchQuotesFromServer, 10000); // Periodic fetching every 10 seconds
 
   // Load last viewed quote from session storage
   const lastViewedQuote = sessionStorage.getItem("lastViewedQuote");
