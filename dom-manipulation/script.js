@@ -205,8 +205,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  function fetchQuotesFromServer() {
-    fetch(serverUrl)
+  async function fetchQuotesFromServer() {
+    await fetch(serverUrl)
       .then((response) => response.json())
       .then((serverQuotes) => {
         if (JSON.stringify(serverQuotes) !== JSON.stringify(quotes)) {
