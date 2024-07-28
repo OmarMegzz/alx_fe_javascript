@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Data synced with server:", data);
+        console.log("Quotes synced with server!:", data);
       })
       .catch((error) => {
         console.error("Error syncing with server:", error);
