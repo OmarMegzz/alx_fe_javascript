@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCategoryFilter();
 
   function showRandomQuote() {
-    const filteredQuotes = getFilteredQuotes();
+    const filteredQuotes = populateCategories();
     if (filteredQuotes.length > 0) {
       const randomIndx = Math.floor(Math.random() * filteredQuotes.length);
       const randomQuote = filteredQuotes[randomIndx];
@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fileReader.readAsText(event.target.files[0]);
   }
 
-  function getFilteredQuotes() {
+  function populateCategories() {
     const selectedCategory = categoryFilter.value;
     if (selectedCategory === "all") {
       return quotes;
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function filterQuotes() {
-    const filteredQuotes = getFilteredQuotes();
+    const filteredQuotes = populateCategories();
     if (filteredQuotes.length > 0) {
       quoteDisplay.innerHTML = `"${filteredQuotes[0].text}" - ${filteredQuotes[0].category}`;
     } else {
